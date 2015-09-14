@@ -40,9 +40,9 @@ function request(url, callback) {
 
 function parseDate(str) {
   var date = new Date();
-  var match = /(hoje|amanhã|\d{2}\/\d{2})\s+às\s+(\d{2}:\d{2})/.exec(str);
+  var match = /(hoje|amanhã|\d{2}\/\d{2})\s+às\s+(\d{2}:\d{2}(:\d{2})?)/.exec(str);
 
-  if (!match) return date;
+  if (!match) return null;
 
   switch (match[1]) {
   case 'hoje':
@@ -58,9 +58,10 @@ function parseDate(str) {
     date.setMonth(parseInt(dateParts[1], 10) - 1);
   }
 
-  var timeParts = match[2].split(':', 2);
+  var timeParts = match[2].split(':', 3);
   date.setHours(parseInt(timeParts[0], 10));
   date.setMinutes(parseInt(timeParts[1], 10));
+  date.setSeconds(timeParts[2] ? parseInt(timeParts[2], 10) : 0);
 
   return date;
 }
@@ -93,7 +94,7 @@ function updateMain(dispatch) {
 
       var id = i + '_next';
       var description = building.name + ' Nível ' + building.level_next;
-      var date = building.error ? parseDate(building.error) : new Date();
+      var date = building.error ? parseDate(building.error) : null;
       dispatch(add(id, description, date));
     }
   });
@@ -111,10 +112,17 @@ function updateEventAssault(dispatch) {
       naval: 'Assalto ao Castelo (Apoio Naval)'
     };
 
+    var now = new Date();
+    var energy = event[1].energy;
+    var rawEnergy = Math.min(energy.max, energy.current + ((now.getTime() / 1000) - energy.last) / energy.interval);
+    var nextEnergy = energy.interval * (1 - (rawEnergy % 1)) + 1;
+    var dateEnergy = rawEnergy >= 1.0 ? null : new Date(now.getTime()  + (nextEnergy * 1000));
+
     for (var i in event[1].last_reinforce) {
       var time = event[1].last_reinforce[i];
       var cooldown = time + (event[0].areas[i].cooldown * 60);
-      dispatch(add('event_assault_' + i, descriptions[i], new Date(cooldown * 1000)));
+      var date = new Date(cooldown * 1000);
+      dispatch(add('event_assault_' + i, descriptions[i], date <= now ? dateEnergy : date));
     }
   });
 }

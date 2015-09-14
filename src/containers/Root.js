@@ -35,18 +35,8 @@ export default class Root extends Component {
   };
 
   render() {
-    var style = {
-      position: 'fixed',
-      right: 0,
-      top: 0,
-      bottom: 0,
-      width: '50%',
-      overflow: 'auto',
-      zIndex: 99999,
-      backgroundColor: '#fff'
-    };
     return (
-      <div style={style}>
+      <div>
         {createElements(this.props.history)}
       </div>
     );
