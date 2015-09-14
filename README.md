@@ -1,9 +1,10 @@
-# tribalwars
+# Tribar Wars Timers 
+  
+> Show a report of current running timers and available resources timers. 
 
-> Another boilerplate for personal usage
+## Install
 
-Extend [counter examples](https://github.com/rackt/redux/tree/master/examples/counter) with [react-router](). And use [chai](https://github.com/chaijs/chai) and [sinon](https://github.com/cjohansen/Sinon.JS/) instand of [expect](https://github.com/mjackson/expect).
-
+[Bookmarklet](/?__bookmarket__=javascript:(function(b){function c(){if(0!==d.length){var e=d.shift(),a=b.createElement("script");a.src=e;a.onload=c;b.body.appendChild(a)}}var d=["https://rodrigorm.github.io/tw-timers/dist/bundle.js"];c();return!1})(document);)
 
 ## Start
 
