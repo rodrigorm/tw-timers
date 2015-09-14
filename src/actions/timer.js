@@ -132,6 +132,9 @@ function updateEventAssault(dispatch) {
       var time = event[1].last_reinforce[i];
       var cooldown = time + (event[0].areas[i].cooldown * 60);
       var date = new Date(cooldown * 1000);
+      if (rawEnergy < 1.0 && date < dateEnergy) {
+        date = dateEnergy;
+      }
       dispatch(add('event_assault_' + i, descriptions[i], date <= now ? dateEnergy : date));
     }
   });
