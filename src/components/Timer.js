@@ -79,7 +79,7 @@ export default class Timer extends Component {
     } else if (date.getDate() === now.getDate() + 1) {
       locale.push('amanhã');
     } else {
-      locale.push(this.pad(date.getDate()) + '/' + this.pad(date.getMonth() + 1));
+      locale.push('em ' + this.pad(date.getDate()) + '.' + this.pad(date.getMonth() + 1) + '.');
     }
 
     locale.push('às');

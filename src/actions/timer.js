@@ -76,6 +76,16 @@ function updateMain(dispatch) {
     var doc = document.implementation.createHTMLDocument('example');
     doc.documentElement.innerHTML = responseText;
 
+    var match = /game_data\s+=\s+({.*});/.exec(responseText);
+    var gameData = eval('(' + match[1] + ')');
+    var village = gameData.village;
+    console.log(village);
+
+    var now = new Date();
+    dispatch(add('storage_wood', 'Madeira', village.wood_float >= village.storage_max ? null : (new Date(now.getTime() + (((village.storage_max - village.wood_float) / village.wood_prod) * 1000)))));
+    dispatch(add('storage_stone', 'Argila', village.stone_float >= village.storage_max ? null : (new Date(now.getTime() + (((village.storage_max - village.stone_float) / village.stone_prod) * 1000)))));
+    dispatch(add('storage_iron', 'Ferro', village.iron_float >= village.storage_max ? null : (new Date(now.getTime() + (((village.storage_max - village.iron_float) / village.iron_prod) * 1000)))));
+
     for (var i in buildings) {
       var building = buildings[i];
 
