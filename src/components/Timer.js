@@ -113,28 +113,26 @@ export default class Timer extends Component {
 
   render() {
     return (
-      <div className="content-border">
-        <div className="inner-border" style={{padding: 10}}>
-          <p><button className="btn" onClick={this.props.update}>Atualizar</button></p>
-          <table className="vis" style={{borderSpacing: 2, borderCollapse: 'separate', emptyCells: 'show', width: '100%'}}>
-            <tbody>
-              <tr>
-                <th style={{padding: '2px 4px'}}>Descrição</th>
-                <th style={{padding: '2px 4px'}}>Duração</th>
-                <th style={{padding: '2px 4px'}}>Conclusão</th>
-              </tr>
-              {this.state.timers.map((timer) => {
-                return (
-                  <tr key={timer.id}>
-                    <td style={{padding: '2px 4px'}}>{timer.description}</td>
-                    <td className="nowrap" style={{padding: '2px 4px', textAlign: 'right'}}>{this.remaining(timer.date)}</td>
-                    <td style={{padding: '2px 4px', textAlign: 'right'}}>{this.dateLocale(timer.date)}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+      <div>
+        <p><button className="btn" onClick={this.props.update}>Atualizar</button></p>
+        <table className="vis" style={{borderSpacing: 2, borderCollapse: 'separate', emptyCells: 'show', width: '100%'}}>
+          <tbody>
+            <tr>
+              <th style={{padding: '2px 4px'}}>Descrição</th>
+              <th style={{padding: '2px 4px'}}>Duração</th>
+              <th style={{padding: '2px 4px'}}>Conclusão</th>
+            </tr>
+            {this.state.timers.map((timer) => {
+              return (
+                <tr key={timer.id}>
+                  <td style={{padding: '2px 4px'}}>{timer.description}</td>
+                  <td className="nowrap" style={{padding: '2px 4px', textAlign: 'right'}}>{this.remaining(timer.date)}</td>
+                  <td style={{padding: '2px 4px', textAlign: 'right'}}>{this.dateLocale(timer.date)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     );
   }
