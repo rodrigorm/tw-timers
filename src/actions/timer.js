@@ -40,7 +40,7 @@ function request(url, callback) {
 
 function parseDate(str) {
   var date = new Date();
-  var match = /(hoje|amanhã|\d{2}\/\d{2})\s+às\s+(\d{2}:\d{2}(:\d{2})?)/.exec(str);
+  var match = /(hoje|amanhã|\d{2}\.\d{2}\.)\s+às\s+(\d{2}:\d{2}(:\d{2})?)/.exec(str);
 
   if (!match) return null;
 
@@ -127,9 +127,44 @@ function updateEventAssault(dispatch) {
   });
 }
 
+function updateTrain(dispatch) {
+  request('https://br70.tribalwars.com.br/game.php?village=37400&mode=train&screen=train', (err, responseText) => {
+    if (err) return;
+
+    var match = /UnitPopup\.unit_data\s+=\s+({.*});/.exec(responseText);
+    var units = eval('(' + match[1] + ')');
+
+    for (var i in units) {
+      var unit = units[i];
+
+      if (!unit.requirements_met) continue;
+
+      var id = 'train_' + i;
+      var description = unit.name;
+      var date = unit.error ? parseDate(unit.error) : null;
+      dispatch(add(id, description, date));
+    }
+
+    var doc = document.implementation.createHTMLDocument('example');
+    doc.documentElement.innerHTML = responseText;
+
+    var queueEls = doc.querySelectorAll('#trainqueue_wrap_barracks tr.lit');
+    console.log(queueEls);
+    for (var j in [].slice.call(queueEls)) {
+      var queueEl = queueEls[j];
+      var itemEls = [].slice.call(queueEl.querySelectorAll('.lit-item'));
+      var id = /id=(\d+)/.exec(itemEls[3].innerHTML)[1];
+      var description = itemEls[0].innerText;
+      var date = parseDate(itemEls[2].innerText);
+      dispatch(add(id, description, date));
+    }
+  });
+}
+
 export function update() {
   return dispatch => {
     updateMain(dispatch);
+    updateTrain(dispatch);
     updateEventAssault(dispatch);
   };
 }
