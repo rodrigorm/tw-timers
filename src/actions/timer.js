@@ -79,7 +79,6 @@ function updateMain(dispatch) {
     var match = /game_data\s+=\s+({.*});/.exec(responseText);
     var gameData = eval('(' + match[1] + ')');
     var village = gameData.village;
-    console.log(village);
 
     var now = new Date();
     dispatch(add('storage_wood', 'Madeira', village.wood_float >= village.storage_max ? null : (new Date(now.getTime() + (((village.storage_max - village.wood_float) / village.wood_prod) * 1000)))));
@@ -161,11 +160,25 @@ function updateTrain(dispatch) {
     var doc = document.implementation.createHTMLDocument('example');
     doc.documentElement.innerHTML = responseText;
 
-    var queueEls = doc.querySelectorAll('#trainqueue_wrap_barracks tr.lit');
-    console.log(queueEls);
+    var queueRunningEls = doc.querySelectorAll('#trainqueue_wrap_barracks tr.lit');
+    for (var j in [].slice.call(queueRunningEls)) {
+      var queueEl = queueRunningEls[j];
+      var itemEls = [].slice.call(queueEl.querySelectorAll('.lit-item'));
+      var id = /id=(\d+)/.exec(itemEls[3].innerHTML)[1];
+      var description = itemEls[0].innerText;
+      var date = parseDate(itemEls[2].innerText);
+      dispatch(add(id, description, date));
+    }
+
+    var queueEls = doc.querySelectorAll('#trainqueue_barracks tr');
     for (var j in [].slice.call(queueEls)) {
       var queueEl = queueEls[j];
-      var itemEls = [].slice.call(queueEl.querySelectorAll('.lit-item'));
+      var itemEls = [].slice.call(queueEl.querySelectorAll('td'));
+
+      if (itemEls.length < 3) {
+        continue;
+      }
+
       var id = /id=(\d+)/.exec(itemEls[3].innerHTML)[1];
       var description = itemEls[0].innerText;
       var date = parseDate(itemEls[2].innerText);
