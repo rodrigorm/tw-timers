@@ -67,7 +67,7 @@ function parseDate(str) {
 }
 
 function updateMain(dispatch) {
-  request('https://br70.tribalwars.com.br/game.php?village=37400&screen=main', (err, responseText) => {
+  request('https://br88.tribalwars.com.br/game.php?village=35692&screen=main', (err, responseText) => {
     if (err) return;
 
     var match = /BuildingMain\.buildings\s+=\s+({.*});/.exec(responseText);
@@ -110,7 +110,7 @@ function updateMain(dispatch) {
 }
 
 function updateEventAssault(dispatch) {
-  request('https://br70.tribalwars.com.br/game.php?village=37400&screen=event_assault', (err, responseText) => {
+  request('https://br88.tribalwars.com.br/game.php?village=35692&screen=event_assault', (err, responseText) => {
     if (err) return;
 
     var match = /EventAssault\.init\(({.*})\);/.exec(responseText);
@@ -140,7 +140,7 @@ function updateEventAssault(dispatch) {
 }
 
 function updateTrain(dispatch) {
-  request('https://br70.tribalwars.com.br/game.php?village=37400&mode=train&screen=train', (err, responseText) => {
+  request('https://br88.tribalwars.com.br/game.php?village=35692&mode=train&screen=train', (err, responseText) => {
     if (err) return;
 
     var match = /UnitPopup\.unit_data\s+=\s+({.*});/.exec(responseText);
